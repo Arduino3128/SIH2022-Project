@@ -1,0 +1,2 @@
+# Add file/folder name which has to be ignored and pushed to git.
+__pycache__/
