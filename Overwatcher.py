@@ -1,6 +1,7 @@
 # This program will overlook all the components of the system.
 from time import sleep
 from rich import print as pprint
+from threading import Thread
 
 import GPS, Navigation, Density, PressureTransducer
 
@@ -26,3 +27,15 @@ def GPSQuality(refreshRate):
 
 def RefractometerQuality():
     pass
+
+
+def start():
+    global run
+    run = True
+    GPSOThread = Thread(target=GPSQuality, args=(5,))
+    GPSOThread.start()
+
+
+def stop():
+    global run
+    run = False

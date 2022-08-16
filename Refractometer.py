@@ -1,4 +1,3 @@
-# from picamera import PiCamera
 # import RPi.GPIO as GPIO
 from time import sleep
 import cv2
@@ -11,7 +10,6 @@ from rich import print as pprint
 LaserPin = 11
 
 # Initialize and configure
-# camera = PiCamera()
 config_file = configparser.ConfigParser()
 # GPIO.setmode(GPIO.BCM)
 # GPIO.setup(LaserPin, GPIO.OUT)
@@ -45,7 +43,11 @@ class ImageProcessing:
 
     def capture(self):
         try:
-            camera.capture("ADD PATH TO SAVE PHOTO TO: ")
+            webcam = cv2.VideoCapture(0)
+            for _ in range(10):
+                check, frame = webcam.read()
+                cv2.imwrite(filename="sample.png", img=frame)
+            webcam.release()
             return "OK"
         except Exception as ERROR:
             return ERROR

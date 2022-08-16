@@ -10,19 +10,13 @@ from Navigation import GPS
 
 
 # config.configure()  # Enable and start interface modules in Kernel.
-image = ImageProcessing()
-# image.calibrate()
-# print(image.refraction())
+Overwatcher.start()
 gps = GPS()
-gpsstat = gps.start("COM3", 9600)
+gpsstat = gps.start("/dev/serial0", 9600)
 
 if gpsstat != "OK":
     pprint(f"[red bold][MAIN THREAD] {gpsstat}[/red bold]")
     sys.exit()
-
-GPSOThread = Thread(target=Overwatcher.GPSQuality, args=(5,))
-Overwatcher.run = True
-GPSOThread.start()
 
 while gps.quality() == 0:
     pprint("[yellow][MAIN THREAD] Waiting for a GPS fix[/yellow]")
@@ -36,7 +30,7 @@ if gps.quality() > 0:
         pprint("[blue]Differential GPS Fix[/blue]")
     print(gps.coords()["lat"])
     print(gps.coords()["long"])
-Overwatcher.run = False
 gps.stop()
 print(density())
 # print(Sensor.Temperature())
+Overwatcher.stop()
