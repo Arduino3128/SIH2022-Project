@@ -1,4 +1,4 @@
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 from time import sleep
 import cv2
 import numpy as np
@@ -7,12 +7,12 @@ from rich import print as pprint
 
 
 # Pin Defination
-LaserPin = 11
+LaserPin = 12
 
 # Initialize and configure
 config_file = configparser.ConfigParser()
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setup(LaserPin, GPIO.OUT)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(LaserPin, GPIO.OUT)
 fromCenter = False
 showCrosshair = False
 sleep(2)  # Wait for 2 seconds to let everything initialize
@@ -24,14 +24,14 @@ class Laser:
 
     def on(self):
         try:
-            GPIO.output(12, True)
+            GPIO.output(LaserPin, True)
             return "ON"
         except Exception as ERROR:
             return ERROR
 
     def off(self):
         try:
-            GPIO.output(12, False)
+            GPIO.output(LaserPin, False)
             return "OFF"
         except Exception as ERROR:
             return ERROR
@@ -42,6 +42,7 @@ class ImageProcessing:
         pprint("[green bold][REFRACTOMETER] Image processor started![/green bold]")
 
     def capture(self):
+        return "OK"
         try:
             webcam = cv2.VideoCapture(0)
             for _ in range(10):
@@ -80,7 +81,7 @@ class ImageProcessing:
         return data
 
     def calibrate(self):
-        self.capture()
+        # self.capture()
         originalImage = cv2.imread("sample.png")
         grayImage = cv2.cvtColor(originalImage, cv2.COLOR_BGR2GRAY)
         grayImage = cv2.fastNlMeansDenoising(grayImage, None, h=10)

@@ -6,7 +6,7 @@ dout = 5
 sck = 6
 
 try:
-    hx = SimpleHX711(dout, sck, 1, 0)
+    hx = AdvancedHX711(dout, sck, 1, 0, Rate.HZ_10)
 except GpioException:
     print("Failed to connect to HX711 chip", file=sys.stderr)
     sys.exit(os.EX_UNAVAILABLE)
@@ -16,6 +16,16 @@ except TimeoutException:
 
 samples = 15
 
-while True:
-    Values = hx.read(Options(samples))
-    print(f"Values: {Values}")
+
+class Transducer:
+    def __init__(self) -> None:
+        pass
+
+    def calibrate(self):
+        print("Remove the pressure intially")
+        self.offset = hx.read(Options(samples))
+
+    def get_value(self):
+        while True:
+            values = hx.read(Options(samples))
+            print(f"Values: {values-self.offset}")

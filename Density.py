@@ -1,3 +1,6 @@
+from pprint import pp
+import numpy as np
+
 from Refractometer import ImageProcessing
 from Sensors import Sensor
 
@@ -11,9 +14,12 @@ def density():
     if refraction == "Failed":
         return "Failed"
     brix = (1 - refraction) * 100
+    print(brix)
     tempf = sensor.Temperature(unit="F")
     tempc = sensor.Temperature(unit="C")
-    value = (brix / (258.6 - ((brix / 258.2) * 227.1))) + 1  # Brix to density
+    p = np.poly1d([182.4601, -775.6821, 1262.7794, -669.5622 - brix])
+    value = complex(p.r[-1]).real  # Brix to density
+    # value = (brix / (258.6 - ((brix / 258.2) * 227.1))) + 1  # Brix to density
 
     value += (
         1.313454

@@ -1,18 +1,22 @@
 import sys, time, config
+from tkinter.tix import Tree
 from threading import Thread
 from rich import print as pprint
 
 import Overwatcher
 from Sensors import Sensor
 from Density import density
-from Refractometer import ImageProcessing
-from Navigation import GPS
+from Refractometer import ImageProcessing, Laser
+from Navigation import GPS, Compass
 
 
-# config.configure()  # Enable and start interface modules in Kernel.
+config.configure()  # Enable and start interface modules in Kernel.
+
 Overwatcher.start()
 gps = GPS()
 gpsstat = gps.start("/dev/serial0", 9600)
+laser = Laser()
+print(density())
 
 if gpsstat != "OK":
     pprint(f"[red bold][MAIN THREAD] {gpsstat}[/red bold]")
@@ -31,6 +35,5 @@ if gps.quality() > 0:
     print(gps.coords()["lat"])
     print(gps.coords()["long"])
 gps.stop()
-print(density())
 # print(Sensor.Temperature())
 Overwatcher.stop()

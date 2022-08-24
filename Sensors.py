@@ -7,6 +7,7 @@ class Sensor:
         pass
 
     def Temperature(self, unit="C"):
+        return 20
         with open("/sys/bus/w1/devices/28-01186c811dff/temperature") as temp:
             temp = int(temp.read()) / 1000
         if unit == "F":

@@ -42,4 +42,4 @@ class Compass:
 
     def get_heading(self):
         magnet_x, magnet_y, _ = self.sensor.magnetic
-        return self.vector_2_degrees(magnet_x, magnet_y)
+        return round(self.vector_2_degrees(magnet_x, magnet_y), 3)
